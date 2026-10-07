@@ -10,7 +10,6 @@ processor = Sam3Processor(model)
 
 img = Image.open("data/image.jpeg").convert("RGB")
 
-# MUST be named argument
 state = processor.set_image(image=img)
 
 out = processor.set_text_prompt(
