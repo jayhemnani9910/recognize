@@ -1,25 +1,43 @@
 # recognize
 
-SAM3 (Segment Anything Model) recognition and segmentation experiments.
-
-## Notes
-
-- Main docs live under `models/facebook-sam3/README.md`.
-
-## Setup
+Two short Python scripts that run Meta's SAM 3 on an image and mask every match for a text prompt.
 
 ```
-git submodule update --init
-pip install -e sam3 matplotlib
+git clone --recursive https://github.com/jayhemnani9910/recognize && cd recognize && pip install torch torchvision einops decord pycocotools psutil matplotlib -e ./sam3
 ```
 
-`build_sam3_image_model()` downloads the `facebook/sam3` checkpoint from Hugging Face (`load_from_HF=True` by default). The checkpoint is gated: request access on the model page, then `hf auth login`.
+You need an NVIDIA GPU. SAM 3's model builder puts tensors on CUDA, so a CPU-only PyTorch fails with "Torch not compiled with CUDA enabled".
 
-Put an input image at `data/image.jpeg` (the `data/` folder is gitignored).
+The weights are gated. Request access on the [facebook/sam3](https://huggingface.co/facebook/sam3) model page, then run `hf auth login`. The first run downloads `sam3.pt` (3.45 GB). Without access the scripts stop with a `GatedRepoError`.
 
-## Run
+## Usage
+
+Put an image at `data/image.jpeg` (`data/` is gitignored), then:
 
 ```
-python run_sam3_image.py   # prints mask count and box shape for the prompt "person"
-python viz_sam3_image.py   # overlays the masks and saves data/output_masks.png
+python run_sam3_image.py   # prints the mask count and box shape for the prompt "person"
+python viz_sam3_image.py   # overlays the masks on the image and saves data/output_masks.png
 ```
+
+The prompt is the `prompt="person"` line in each script. Change it to any short phrase, like "dog" or "red car".
+
+## How it works
+
+Both scripts do the same four things:
+
+1. `build_sam3_image_model()` builds SAM 3 and pulls the checkpoint from Hugging Face.
+2. `Sam3Processor.set_image()` encodes the image once.
+3. `set_text_prompt()` finds every instance of the phrase and returns `masks`, `boxes` and `scores`. Detections under the processor's 0.5 confidence threshold are dropped.
+4. `run_sam3_image.py` prints the result. `viz_sam3_image.py` draws each mask at 40% opacity with matplotlib.
+
+`sam3/` is a git submodule of [facebookresearch/sam3](https://github.com/facebookresearch/sam3), pinned at `84cc43b`. Its own `pyproject.toml` leaves out torch, torchvision, einops, decord, pycocotools and psutil, which is why the install line lists them.
+
+`models/facebook-sam3/` holds the config, tokenizer files, model card and license from the Hugging Face model repo. The scripts don't read these files. They load everything through the `sam3` package.
+
+## Credits and license
+
+SAM 3 is by Meta AI Research. Its code and weights are under Meta's [SAM License](models/facebook-sam3/LICENSE), not an open source license. This repo has no license of its own yet.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
