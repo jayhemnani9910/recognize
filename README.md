@@ -1,5 +1,7 @@
 # recognize
 
+[![CI](https://github.com/jayhemnani9910/recognize/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jayhemnani9910/recognize/actions/workflows/ci.yml)
+
 Two short Python scripts that run Meta's SAM 3 on an image and mask every match for a text prompt.
 
 ```
@@ -36,7 +38,7 @@ Both scripts do the same four things:
 
 ## Credits and license
 
-SAM 3 is by Meta AI Research. Its code and weights are under Meta's [SAM License](models/facebook-sam3/LICENSE), not an open source license. This repo has no license of its own yet.
+SAM 3 is by Meta AI Research. Its code and weights are under Meta's [SAM License](models/facebook-sam3/LICENSE), which has its own terms and use restrictions. This repo has no license of its own yet.
 
 ## Contributing
 
