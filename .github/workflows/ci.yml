@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff==0.16.10
+      - run: ruff check run_sam3_image.py viz_sam3_image.py
+      - run: ruff format --check run_sam3_image.py viz_sam3_image.py
+
+  imports:
+    # SAM 3 needs CUDA and gated weights, so CI can't run the model.
+    # This checks that the install resolves and the scripts' imports load.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
+      - run: pip install triton einops decord pycocotools psutil matplotlib -e ./sam3
+      - run: python -c "from sam3.model_builder import build_sam3_image_model; from sam3.model.sam3_image_processor import Sam3Processor; import matplotlib.pyplot"
