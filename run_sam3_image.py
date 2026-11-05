@@ -1,7 +1,7 @@
-from sam3.model_builder import build_sam3_image_model
-from sam3.model.sam3_image_processor import Sam3Processor
-from PIL import Image
 import torch
+from PIL import Image
+from sam3.model.sam3_image_processor import Sam3Processor
+from sam3.model_builder import build_sam3_image_model
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -30,4 +30,3 @@ scores = output["scores"]
 
 print("masks:", len(masks))
 print("boxes:", boxes.shape)
-

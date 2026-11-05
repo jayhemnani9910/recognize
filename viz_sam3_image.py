@@ -1,7 +1,8 @@
-from sam3.model_builder import build_sam3_image_model
-from sam3.model.sam3_image_processor import Sam3Processor
+import matplotlib.pyplot as plt
+import torch
 from PIL import Image
-import torch, matplotlib.pyplot as plt
+from sam3.model.sam3_image_processor import Sam3Processor
+from sam3.model_builder import build_sam3_image_model
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -12,10 +13,7 @@ img = Image.open("data/image.jpeg").convert("RGB")
 
 state = processor.set_image(image=img)
 
-out = processor.set_text_prompt(
-    state=state,
-    prompt="person"
-)
+out = processor.set_text_prompt(state=state, prompt="person")
 
 masks = out["masks"]
 
@@ -30,4 +28,3 @@ ax.axis("off")
 plt.tight_layout()
 plt.savefig("data/output_masks.png")
 print("saved → data/output_masks.png")
-
