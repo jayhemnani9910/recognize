@@ -38,7 +38,9 @@ Both scripts do the same four things:
 
 ## Credits and license
 
-SAM 3 is by Meta AI Research. Its code and weights are under Meta's [SAM License](models/facebook-sam3/LICENSE), which has its own terms and use restrictions. This repo has no license of its own yet.
+The two scripts are MIT, see [LICENSE](LICENSE).
+
+SAM 3 is by Meta AI Research. Its code (the `sam3/` submodule), the `sam3.pt` weights and the files in `models/facebook-sam3/` are under Meta's [SAM License](models/facebook-sam3/LICENSE), which has its own terms and use restrictions. MIT does not cover them.
 
 ## Contributing
 
